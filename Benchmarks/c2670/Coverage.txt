@@ -1,0 +1,25 @@
+Test Pattern File : c2670_ndetect.patterns
+Number of test iterations : 23
+Coverage : 0.3
+Test Pattern File : c2670_ndetect.patterns
+Number of Valid Trojans : 5
+Valid trojan sample : 
+[['N1448', '0  ']]
+[['N2830', '1  ']]
+[['N3734', '1  ']]
+[['N3079', '0  ']]
+[['N3038', '1  ']]
+Number of test iterations : 23
+Coverage : 0.2
+===================================================================================
+Test Pattern File : c2670_ndetect.patterns
+Number of Valid Trojans : 5
+Valid trojan sample : 
+[['N3079', '0  ']]
+[['N1277', '1  ']]
+[['_0000_', '1  ']]
+[['N2830', '1  ']]
+[['N3038', '1  ']]
+Number of test iterations : 23
+Coverage : 0.1
+===================================================================================

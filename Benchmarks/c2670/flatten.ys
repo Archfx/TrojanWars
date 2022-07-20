@@ -1,0 +1,29 @@
+
+
+read_verilog c2670.v
+
+# elaborate design hierarchy
+hierarchy -check -top  c2670
+
+# the high-level stuff
+proc; opt; fsm; opt; memory; opt
+
+proc_mux
+fsm; opt;
+
+flatten 
+# splitnets -format __  c2670
+
+proc_rmdead
+freduce 
+opt_reduce -fine
+opt_clean -purge
+
+proc_clean
+
+select -module c2670
+
+# write inline design
+write_verilog  -noattr -selected inline.v
+
+    
