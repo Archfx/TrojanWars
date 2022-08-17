@@ -1,0 +1,10 @@
+*.sim
+.vscode
+__pycache__
+*.g
+*.log
+*.daidir
+.txt
+.mem
+.ys
+.tcl
