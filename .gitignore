@@ -9,3 +9,6 @@ __pycache__
 .ys
 .tcl
 .patterns
+csrc
+.cdsinit
+.cds.lib
