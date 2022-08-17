@@ -1,0 +1,7 @@
+This folder contains the necessary files to build the test bench using iVerilog
+
+Before any of the test generation tools are run, it is necessary to first 
+run make in this directory. 
+
+This directory will create the memory to be used as the inputs for the simulations 
+as well as files detailing the design to be used in the simulations.
