@@ -12,7 +12,6 @@ export midetect="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/
 
 echo $'\n ****** PATH variables added to the current Shell instance ******* \n'
 
-module load syn
-module load vcs
+source /apps/settings
 
 echo $'\n ****** Modules loaded to the current Shell instance ******* \n'

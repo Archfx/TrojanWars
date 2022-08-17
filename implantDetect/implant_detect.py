@@ -5,6 +5,7 @@ from optparse import OptionParser
 import re
 import subprocess
 import sys
+import datetime;
 
 progressBar_width = 40
 
@@ -58,6 +59,7 @@ def main():
     testbench_filepath =  TESTBENCH_FILE
     data_filepath =  DATA_MEM
     diff_file =  diff
+    mid_summary_filepath =  "mid_summary.txt"
 
 
     print("Instrumenting testbench ")
@@ -102,6 +104,8 @@ def main():
     # Open Generated test files
 
     print("Simulation Started : ")
+    activated_counter = 0
+    summary = '\n'
 
     simulation_counter = 0
     with open(testvector_filepath, 'r') as fileobj:
@@ -130,7 +134,14 @@ def main():
                 diff_command = "diff -u "+ goldenoutput_filepath +" "+ suspectedoutput_filepath +" >> "+ diff_file
                 process = subprocess.Popen(diff_command, shell=True, stdout=subprocess.PIPE)
                 process.wait()
-				
+
+                try:		
+                    out = subprocess.check_output("diff -u "+ goldenoutput_filepath +" "+ suspectedoutput_filepath, shell=True).decode("utf-8")
+                except subprocess.CalledProcessError as e:
+                    if "+" in e.output.decode("utf-8") or "-" in e.output.decode("utf-8"):
+                        activated_counter = activated_counter + 1
+                        #print(e.output.decode("utf-8"))
+		
                 f = open(data_filepath , "w")
                 f.write("")
                 f.close()
@@ -141,6 +152,20 @@ def main():
     print("Output saved to "+ diff_file)
     print() 
 
+    summary =  summary + """================================================================================
+*********                 Implant Detect Tool Summary                   ********
+Golden Design : """ + golden_file +"""
+Suspected Design : """ + suspected_file +"""
+Total number of Test vectors : """ + str(int(numVectors/cycles)) +"""
+Number of test vectors that activated the Trojan : """ + str(activated_counter) +"""
+Time Stamp : """ + str(datetime.datetime.now()) +"""
+================================================================================"""
+
+    summary_file = open(mid_summary_filepath , "a")
+    summary_file.write(summary)
+    summary_file.close()
+    print("Summary saved to "+ mid_summary_filepath)   
+    print() 
   
     return
 
