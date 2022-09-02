@@ -6,6 +6,7 @@ import re
 import subprocess
 import sys
 import datetime;
+import difflib
 
 progressBar_width = 40
 
@@ -135,12 +136,25 @@ def main():
                 process = subprocess.Popen(diff_command, shell=True, stdout=subprocess.PIPE)
                 process.wait()
 
-                try:		
-                    out = subprocess.check_output("diff -u "+ goldenoutput_filepath +" "+ suspectedoutput_filepath, shell=True).decode("utf-8")
-                except subprocess.CalledProcessError as e:
-                    if "+" in e.output.decode("utf-8") or "-" in e.output.decode("utf-8"):
-                        activated_counter = activated_counter + 1
-                        #print(e.output.decode("utf-8"))
+                # try:		
+                #     out = subprocess.check_output("diff -u "+ goldenoutput_filepath +" "+ suspectedoutput_filepath, shell=True).decode("utf-8")
+                # except subprocess.CalledProcessError as e:
+                #     if "+" in e.output.decode("utf-8") or "-" in e.output.decode("utf-8"):
+                #         activated_counter = activated_counter + 1
+                #         #print(e.output.decode("utf-8"))
+
+                with open(goldenoutput_filepath) as file_1:
+                    file_1_text = file_1.readlines()
+ 
+                with open(suspectedoutput_filepath) as file_2:
+                    file_2_text = file_2.readlines()
+                
+                # Find and count the diff:
+                for line in difflib.unified_diff(
+                        file_1_text, file_2_text, fromfile=goldenoutput_filepath,
+                        tofile=suspectedoutput_filepath, lineterm=''):
+                    activated_counter = activated_counter + 1
+                    break
 		
                 f = open(data_filepath , "w")
                 f.write("")
