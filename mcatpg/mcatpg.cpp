@@ -426,10 +426,6 @@ int main(int argc, char **argv)
     
 
   
-    cout << " : Done \n";
-
-    cout << "Generating test vectors \n";
-
     vector<pair <string, string>> rareNodeMap;
     getRareNodes(rareNodeMap, rarenodes);
 
@@ -438,209 +434,209 @@ int main(int argc, char **argv)
     string assign = "";
     int interCount = 0;
 
-    ofstream patternFile( top +"_ndatpg.patterns", std::ios_base::app);
+    
 	
  
-    for (int i = 0; i < nodeCount; i++)
-    {
+    // for (int i = 0; i < nodeCount; i++)
+    // {
 
-        string rarenode = get<0>(rareNodeMap[i]);
-        string rarevalue = get<1>(rareNodeMap[i]);
+    //     string rarenode = get<0>(rareNodeMap[i]);
+    //     string rarevalue = get<1>(rareNodeMap[i]);
 
 
-        if (rarenode.find("[") != std::string::npos & rarenode.find("]") != std::string::npos) 
-        {
+    //     if (rarenode.find("[") != std::string::npos & rarenode.find("]") != std::string::npos) 
+    //     {
           
-          replace_txt(rarenode, "[","_");
-          replace_txt(rarenode, "]","_");
+    //       replace_txt(rarenode, "[","_");
+    //       replace_txt(rarenode, "]","_");
           
-        }
+    //     }
 
-        pair<string, string> node = (make_pair(rarenode, rarevalue));
+    //     pair<string, string> node = (make_pair(rarenode, rarevalue));
 
-        string tclContent = tclQuery(getConstraint(node),getStuck(node),"");
+    //     string tclContent = tclQuery(getConstraint(node),getStuck(node),"");
           
-        std::ofstream out("query.tcl");
-        out << tclContent;
-        out.close();
+    //     std::ofstream out("query.tcl");
+    //     out << tclContent;
+    //     out.close();
 
-        // Read console outputs
-		std::string output;
+    //     // Read console outputs
+		//     std::string output;
 
-        execute("tmax -shell -tcl query.tcl", output);
-        loginfo(output);
-        #ifdef TMAX_OUT_PRINT
-        std::cout << output;
-        #endif
+    //     execute("tmax -shell -tcl query.tcl", output);
+    //     loginfo(output);
+    //     #ifdef TMAX_OUT_PRINT
+    //     std::cout << output;
+    //     #endif
 
-		if (output.find("Pattern 0 (full_sequential)") != std::string::npos) 
-          {
+		// if (output.find("Pattern 0 (full_sequential)") != std::string::npos) 
+    //       {
               
-              vector<string> patterns = split (output, ": force_all_pis =");
-              vector<string> vectors ;
-              vector<int> indices;
-              int period ;
-              for (int  i =0 ; i< patterns.size();i++)
-              {
-                if (patterns[i].find("period =") != std::string::npos) period = stoi(removeSpaces(split(patterns[i],"period =")[1]));
-                if (is_number(split (patterns[i], " ").back()))
-                {
-                // cout << " clock "<< stoi(split (patterns[i], " ").back())/period << endl;
-                indices.push_back(stoi(split (patterns[i], " ").back())/period);
-                }
-                if (patterns[i].find("measure_all_pos =") != std::string::npos) 
-                {
-                  // cout << slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1) << endl;
-                  vectors.push_back(slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1));
-                }
-              }
+    //           vector<string> patterns = split (output, ": force_all_pis =");
+    //           vector<string> vectors ;
+    //           vector<int> indices;
+    //           int period ;
+    //           for (int  i =0 ; i< patterns.size();i++)
+    //           {
+    //             if (patterns[i].find("period =") != std::string::npos) period = stoi(removeSpaces(split(patterns[i],"period =")[1]));
+    //             if (is_number(split (patterns[i], " ").back()))
+    //             {
+    //             // cout << " clock "<< stoi(split (patterns[i], " ").back())/period << endl;
+    //             indices.push_back(stoi(split (patterns[i], " ").back())/period);
+    //             }
+    //             if (patterns[i].find("measure_all_pos =") != std::string::npos) 
+    //             {
+    //               // cout << slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1) << endl;
+    //               vectors.push_back(slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1));
+    //             }
+    //           }
 
-              //for (int v; v<indices.size();v++)
-              //{
-                //cout << indices[v] << endl;
-              //}
+    //           //for (int v; v<indices.size();v++)
+    //           //{
+    //             //cout << indices[v] << endl;
+    //           //}
 
-              int index = 0;
-              int ptr = 0;
+    //           int index = 0;
+    //           int ptr = 0;
 
-              for (int y=0; y<unroll_cycle; y++)
-              {
-                  if (indices[ptr]==y) 
-                  {
-                    // index = y;
-                    ptr++;
-                  }
-                  //cout << y <<"  : " <<vectors[ptr-1] << " : "<<  ptr <<endl;
-				  if(patternFile.is_open())
-              	  {
-                  patternFile<<vectors[ptr-1]<< endl;  
-                  }
-                  else cerr<<"Unable to open file";
-                  }
+    //           for (int y=0; y<unroll_cycle; y++)
+    //           {
+    //               if (indices[ptr]==y) 
+    //               {
+    //                 // index = y;
+    //                 ptr++;
+    //               }
+    //               //cout << y <<"  : " <<vectors[ptr-1] << " : "<<  ptr <<endl;
+		// 		  if(patternFile.is_open())
+    //           	  {
+    //               patternFile<<vectors[ptr-1]<< endl;  
+    //               }
+    //               else cerr<<"Unable to open file";
+    //               }
 
-          }  
+    //       }  
 
 
-        else if (output.find("Time 0: force_all_pis =") != std::string::npos) 
-          {
-              string pattern = slicePattern(removeSpaces(split(split(output, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0]),clk_index,rst_index).substr(0,pis.size());
-              #ifdef DEBUG_MODE
-                cout << pattern << '\n';
-                cout << pattern.size();
-              #endif
+    //     else if (output.find("Time 0: force_all_pis =") != std::string::npos) 
+    //       {
+    //           string pattern = slicePattern(removeSpaces(split(split(output, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0]),clk_index,rst_index).substr(0,pis.size());
+    //           #ifdef DEBUG_MODE
+    //             cout << pattern << '\n';
+    //             cout << pattern.size();
+    //           #endif
               
 
-              if(patternFile.is_open())
-              {
-                  patternFile<<pattern<< endl;  
-              }
-              else cerr<<"Unable to open file";
+    //           if(patternFile.is_open())
+    //           {
+    //               patternFile<<pattern<< endl;  
+    //           }
+    //           else cerr<<"Unable to open file";
 
-              for (int n = 0;  n < min(pis.size(), ndetect); n++)
-              {
-                if (pattern[n]=='0') tclContent = tclQuery(getConstraint(node),getStuck(node),getPiconstraint("1",  n));
-                else tclContent = tclQuery(getConstraint(node),getStuck(node),getPiconstraint("0",  n));
-                std::ofstream out("query_n.tcl");
-                out << tclContent;
-                out.close();
-                std::string output_n;
-                execute("tmax -shell -tcl query_n.tcl", output_n);
-                loginfo(output_n);
+    //           for (int n = 0;  n < min(pis.size(), ndetect); n++)
+    //           {
+    //             if (pattern[n]=='0') tclContent = tclQuery(getConstraint(node),getStuck(node),getPiconstraint("1",  n));
+    //             else tclContent = tclQuery(getConstraint(node),getStuck(node),getPiconstraint("0",  n));
+    //             std::ofstream out("query_n.tcl");
+    //             out << tclContent;
+    //             out.close();
+    //             std::string output_n;
+    //             execute("tmax -shell -tcl query_n.tcl", output_n);
+    //             loginfo(output_n);
 
-				if (output_n.find("Pattern 0 (full_sequential)") != std::string::npos) 
-          		{
+		// 		if (output_n.find("Pattern 0 (full_sequential)") != std::string::npos) 
+    //       		{
               
-              		vector<string> patterns = split (output_n, ": force_all_pis =");
-              		vector<string> vectors ;
-              		vector<int> indices;
-              		int period ;
-              		for (int  i =0 ; i< patterns.size();i++)
-               		{
-              			if (patterns[i].find("period =") != std::string::npos) period = stoi(removeSpaces(split(patterns[i],"period =")[1]));
-              			if (is_number(split (patterns[i], " ").back()))
-              			{
-              				// cout << " clock "<< stoi(split (patterns[i], " ").back())/period << endl;
-              				indices.push_back(stoi(split (patterns[i], " ").back())/period);
-              			}
-              			if (patterns[i].find("measure_all_pos =") != std::string::npos) 
-              			{
-              				// cout << slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1) << endl;
-              				vectors.push_back(slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1));
-              			}
-              }
+    //           		vector<string> patterns = split (output_n, ": force_all_pis =");
+    //           		vector<string> vectors ;
+    //           		vector<int> indices;
+    //           		int period ;
+    //           		for (int  i =0 ; i< patterns.size();i++)
+    //            		{
+    //           			if (patterns[i].find("period =") != std::string::npos) period = stoi(removeSpaces(split(patterns[i],"period =")[1]));
+    //           			if (is_number(split (patterns[i], " ").back()))
+    //           			{
+    //           				// cout << " clock "<< stoi(split (patterns[i], " ").back())/period << endl;
+    //           				indices.push_back(stoi(split (patterns[i], " ").back())/period);
+    //           			}
+    //           			if (patterns[i].find("measure_all_pos =") != std::string::npos) 
+    //           			{
+    //           				// cout << slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1) << endl;
+    //           				vectors.push_back(slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1));
+    //           			}
+    //           }
 
 
-              int index = 0;
-              int ptr = 0;
+    //           int index = 0;
+    //           int ptr = 0;
 
-              for (int y=0; y<unroll_cycle; y++)
-              {
-                  if (indices[ptr]==y) 
-                  {
-                    // index = y;
-                    ptr++;
-                  }
-                  //cout << y <<"  : " <<vectors[ptr-1] << " : "<<  ptr <<endl;
-				  if(patternFile.is_open())
-              	  {
-                  patternFile<<vectors[ptr-1]<< endl;  
-                  }
-                  else cerr<<"Unable to open file";
-                  }
+    //           for (int y=0; y<unroll_cycle; y++)
+    //           {
+    //               if (indices[ptr]==y) 
+    //               {
+    //                 // index = y;
+    //                 ptr++;
+    //               }
+    //               //cout << y <<"  : " <<vectors[ptr-1] << " : "<<  ptr <<endl;
+		// 		  if(patternFile.is_open())
+    //           	  {
+    //               patternFile<<vectors[ptr-1]<< endl;  
+    //               }
+    //               else cerr<<"Unable to open file";
+    //               }
 
-          		}  
-                else if (output_n.find("Time 0: force_all_pis =") != std::string::npos) 
-                {
-                    string pattern_n = slicePattern(removeSpaces(split(split(output_n, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0]),clk_index,rst_index).substr(0,pis.size());
-                    #ifdef DEBUG_MODE
-                      cout << pattern_n << '\n';
-                    #endif
+    //       		}  
+    //             else if (output_n.find("Time 0: force_all_pis =") != std::string::npos) 
+    //             {
+    //                 string pattern_n = slicePattern(removeSpaces(split(split(output_n, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0]),clk_index,rst_index).substr(0,pis.size());
+    //                 #ifdef DEBUG_MODE
+    //                   cout << pattern_n << '\n';
+    //                 #endif
 
-                    if(patternFile.is_open())
-                    {
-                      patternFile<<pattern_n<< endl;
-                      for (int m = 0;  m < unroll_cycle-1;)
-                      {
-                        if (pattern_n[m%pis.size()]=='0') tclContent = tclQuery(getConstraint(node),getStuck(node),getPiconstraint("1",  m%pis.size()));
-                        else tclContent = tclQuery(getConstraint(node),getStuck(node),getPiconstraint("0",  m%pis.size()));
-                        std::ofstream out("query_n.tcl");
-                        out << tclContent;
-                        out.close();
-                        std::string output_m;
-                        execute("tmax -shell -tcl query_n.tcl", output_m);
-                        loginfo(output_m);
+    //                 if(patternFile.is_open())
+    //                 {
+    //                   patternFile<<pattern_n<< endl;
+    //                   for (int m = 0;  m < unroll_cycle-1;)
+    //                   {
+    //                     if (pattern_n[m%pis.size()]=='0') tclContent = tclQuery(getConstraint(node),getStuck(node),getPiconstraint("1",  m%pis.size()));
+    //                     else tclContent = tclQuery(getConstraint(node),getStuck(node),getPiconstraint("0",  m%pis.size()));
+    //                     std::ofstream out("query_n.tcl");
+    //                     out << tclContent;
+    //                     out.close();
+    //                     std::string output_m;
+    //                     execute("tmax -shell -tcl query_n.tcl", output_m);
+    //                     loginfo(output_m);
 
-                        if (output_m.find("Time 0: force_all_pis =") != std::string::npos) 
-                        {
-                          string pattern_m = slicePattern(removeSpaces(split(split(output_m, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0]),clk_index,rst_index).substr(0,pis.size());
-                          patternFile<<pattern_m<< endl; 
-                          m++;
-                        }
-						else
-						{
-						  patternFile<<pattern_n<< endl;
-						  m++;
-						}
+    //                     if (output_m.find("Time 0: force_all_pis =") != std::string::npos) 
+    //                     {
+    //                       string pattern_m = slicePattern(removeSpaces(split(split(output_m, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0]),clk_index,rst_index).substr(0,pis.size());
+    //                       patternFile<<pattern_m<< endl; 
+    //                       m++;
+    //                     }
+		// 				else
+		// 				{
+		// 				  patternFile<<pattern_n<< endl;
+		// 				  m++;
+		// 				}
 
-                      } 
-                    }
-                    else cerr<<"Unable to open file";
-                }
-                interCount++;
-                printProgress((double) (interCount)/(double)(nodeCount*min(pis.size(), ndetect)));
+    //                   } 
+    //                 }
+    //                 else cerr<<"Unable to open file";
+    //             }
+    //             interCount++;
+    //             printProgress((double) (interCount)/(double)(nodeCount*min(pis.size(), ndetect)));
 
-              }
-          }
-        else  interCount = interCount + min(pis.size(), ndetect);
+    //           }
+    //       }
+    //     else  interCount = interCount + min(pis.size(), ndetect);
         
-		printProgress((double) (interCount)/(double)(nodeCount*min(pis.size(), ndetect)));
+		// printProgress((double) (interCount)/(double)(nodeCount*min(pis.size(), ndetect)));
 
-        // query_count ++;
-        // printProgress((double) query_count/(double)(nodeCount*(nodeCount-1)*0.5));
+    //     // query_count ++;
+    //     // printProgress((double) query_count/(double)(nodeCount*(nodeCount-1)*0.5));
         
-    }
-	printProgress(1);
-    patternFile.close();
+    // }
+	// printProgress(1);
+  //   patternFile.close();
 
 
 #ifdef GRAPH_BUILD 
@@ -706,7 +702,7 @@ int main(int argc, char **argv)
         }
     }
     cout << "\n";
-    std::ofstream graph("Benchmarks/" + DESIGN +"/graph.g");
+    std::ofstream graph("graph.g");
     graph << to_string(nodeCount) + "\n" + to_string(edgeCount) + "\n" + graphEdges;
     graph.close();
     #endif 
@@ -735,7 +731,7 @@ int main(int argc, char **argv)
 
     cout << "Generating Test Vectors for Activating Cliques : \n";  
 
-    ofstream patternFile("Benchmarks/" + DESIGN +"/" + DESIGN +".patterns");
+    ofstream patternFile( top +"_mcatpg.patterns", std::ios_base::app);
 
     for (int i = 0 ; i<allCliques.size(); i++) 
     {
@@ -750,22 +746,67 @@ int main(int argc, char **argv)
         cout << outputCliq;
         #endif
 
-        if (outputCliq.find("Time 0: force_all_pis =") != std::string::npos) 
-        {
-            #ifdef DEBUG_MODE
-            cout << removeSpaces(split(split(outputCliq, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0]) << '\n';
-            #endif
+        if (output.find("Pattern 0 (full_sequential)") != std::string::npos) 
+          {
+              
+              vector<string> patterns = split (output, ": force_all_pis =");
+              vector<string> vectors ;
+              vector<int> indices;
+              int period ;
+              for (int  i =0 ; i< patterns.size();i++)
+              {
+                if (patterns[i].find("period =") != std::string::npos) period = stoi(removeSpaces(split(patterns[i],"period =")[1]));
+                if (is_number(split (patterns[i], " ").back()))
+                {
+                // cout << " clock "<< stoi(split (patterns[i], " ").back())/period << endl;
+                indices.push_back(stoi(split (patterns[i], " ").back())/period);
+                }
+                if (patterns[i].find("measure_all_pos =") != std::string::npos) 
+                {
+                  // cout << slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1) << endl;
+                  vectors.push_back(slicePattern(removeSpaces(split(patterns[i]," Time ")[0]),0,1));
+                }
+              }
+              int index = 0;
+              int ptr = 0;
 
-            if(patternFile.is_open())
-            {
-                patternFile<<removeSpaces(split(split(outputCliq, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0])<< endl;  
-            }
-            else cerr<<"Unable to open file";
-        }
+              for (int y=0; y<unroll_cycle; y++)
+              {
+                  if (indices[ptr]==y) 
+                  {
+                    // index = y;
+                    ptr++;
+                  }
+                  //cout << y <<"  : " <<vectors[ptr-1] << " : "<<  ptr <<endl;
+				  if(patternFile.is_open())
+              	  {
+                  patternFile<<vectors[ptr-1]<< endl;  
+                  }
+                  else cerr<<"Unable to open file";
+                  }
+
+          }  
+
+
+        else if (output.find("Time 0: force_all_pis =") != std::string::npos) 
+          {
+              string pattern = slicePattern(removeSpaces(split(split(output, "force_all_pis =")[1]," Time 1: measure_all_pos =")[0]),clk_index,rst_index).substr(0,pis.size());
+              #ifdef DEBUG_MODE
+                cout << pattern << '\n';
+                cout << pattern.size();
+              #endif
+              
+
+              if(patternFile.is_open())
+              {
+                  patternFile<<pattern<< endl;  
+              }
+              else cerr<<"Unable to open file";
+          }
         printProgress((double) i/(double)(allCliques.size()));
     }
 
-    cout << "\nWriting test vectors to " + DESIGN +".patterns file: ";
+    cout << "\nWriting test vectors to " + top +"_mcatpg.patterns file: ";
     cout << " : Done \n";
     patternFile.close();
 
@@ -773,7 +814,7 @@ int main(int argc, char **argv)
 
     cout << " : Done \n";
 
-    cout <<"\nNDATPG Generated Test Vectors saved to " + top +"_ndatpg.patterns " + "\n";
+    cout <<"\nMCATPG Generated Test Vectors saved to " + top +"_mcatpg.patterns " + "\n";
 
     cout << "================================================================================\n";
    
