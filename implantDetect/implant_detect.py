@@ -164,8 +164,8 @@ def main():
                 f.write("")
                 f.close()
 
-            progressBar(simulation_counter,numVectors,False)
-    progressBar(numVectors,numVectors,True)
+            progressBar(int(simulation_counter/cycles),int(numVectors/cycles),False)
+    progressBar(int(numVectors/cycles),int(numVectors/cycles),True)
     print()
     print("Output saved to "+ diff_file)
     print() 
