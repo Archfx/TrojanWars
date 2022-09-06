@@ -108,6 +108,10 @@ def main():
     activated_counter = 0
     summary = '\n'
 
+    remove_diff_command = "rm -f "+ diff_file
+    process = subprocess.Popen(remove_diff_command, shell=True, stdout=subprocess.PIPE)
+    process.wait()
+
     simulation_counter = 0
     with open(testvector_filepath, 'r') as fileobj:
         numVectors = len(fileobj.readlines())
