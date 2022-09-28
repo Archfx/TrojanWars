@@ -154,7 +154,6 @@ string tclCliques(vector<int>& Clique, vector<pair<string, string>>& rareNodeMap
     string tclContent = R"(
 set_messages -nodisplay
 set_commands noabort
-cd /home/UFAD/arunajayasena/Designs/MaximalClique/Benchmarks
 read_image design.image
 #add_faults -all
 )" + constraints + R"(
@@ -348,7 +347,6 @@ int main(int argc, char **argv)
     {"top",     required_argument,  0, 't'},
     {"design",     optional_argument,  0, 'd'},
     {"rarenodes",     optional_argument,  0, 'r'},
-    {"ndetect",     optional_argument,  0, 'n'},
     {"cycles",     optional_argument,  0, 'c'},
     {"clk",     required_argument,  0, 'k'},
     {"rst",     required_argument,  0, 's'},
@@ -366,7 +364,7 @@ int main(int argc, char **argv)
 
   while(iarg != -1)
   {
-    iarg = getopt_long(argc, argv, "t:d:r:c:n:k:s:vh", longopts, &index);
+    iarg = getopt_long(argc, argv, "t:d:r:c:k:s:vh", longopts, &index);
 
     switch (iarg)
     {
@@ -384,10 +382,6 @@ int main(int argc, char **argv)
       
       case 'r':
         rarenodes = optarg;
-        break;
-
-      case 'n':
-        ndetect = stoi(optarg);
         break;
 
       case 'c':
@@ -413,16 +407,16 @@ int main(int argc, char **argv)
      "\nMCATPG : Activate cliques of rare nodes with Synopsys TetraMax tool\n";
 
 
-    cout << "\nBuilding the model";
-    // Write the drc model for future use
-    string write_image = tclSaveModel();
-    std::ofstream out("buildModel.tcl");
-    out << write_image;
-    out.close();
-    std::string output;
-    execute("tmax -shell -tcl buildModel.tcl", output);
-    loginfo(output);
-    cout << " : Done \n";
+    // cout << "\nBuilding the model";
+    // // Write the drc model for future use
+    // string write_image = tclSaveModel();
+    // std::ofstream out("buildModel.tcl");
+    // out << write_image;
+    // out.close();
+    // std::string output;
+    // execute("tmax -shell -tcl buildModel.tcl", output);
+    // loginfo(output);
+    // cout << " : Done \n";
     
 
   

@@ -130,7 +130,7 @@ void loginfo(string output)
   {
     cout << "\nERROR : Please refer the following TetraMax error. Please refer the usage details of NTATPG below\n";
     cout << " **** TetraMax error : " << output << " ***\n";
-    usage("./ndatpg");
+    usage("./synth");
     exit(0);
   }
 
@@ -186,6 +186,30 @@ void replace_txt( std::string& s, std::string const& toReplace, std::string cons
     std::size_t pos = s.find(toReplace);
     s.replace(pos, toReplace.length(), replaceWith);
 
+}
+
+string tclSaveModel(){
+    string tclContent = R"(
+set_messages -nodisplay
+set_commands noabort
+set readFile ")" + design +R"("
+set topModule ")" + top +R"("
+#set writeFile "design_output.v"
+set testPatterns "test_patterns.stil"
+set libFile [getenv techmap]/saed90nm.v
+read_netlist $readFile
+read_netlist $libFile -library
+#report_modules -summary
+#report_modules -error
+#report_modules -undefined
+run_build_model $topModule
+run_drc
+set_faults -model stuck
+write_image design.image -replace
+exit
+    )";
+
+    return tclContent;
 }
 
 
@@ -351,8 +375,20 @@ int main(int argc, char **argv)
     out.close();
     
     execute("dc_shell -f synth.tcl", output);
-	loginfo(output);
+	  loginfo(output);
     cout << "  Done \n"; 
+
+    cout << "\nBuilding the ATPG model";
+    // Write the drc model for future use
+    string write_image = tclSaveModel();
+    std::ofstream out("buildModel.tcl");
+    out << write_image;
+    out.close();
+    std::string output;
+    execute("tmax -shell -tcl buildModel.tcl", output);
+    loginfo(output);
+    cout << " : Done \n";
+    
 
 
    
