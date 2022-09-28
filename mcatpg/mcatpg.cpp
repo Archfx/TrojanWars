@@ -633,7 +633,7 @@ int main(int argc, char **argv)
   //   patternFile.close();
 
 
-#ifdef GRAPH_BUILD 
+// #ifdef GRAPH_BUILD 
 
     #ifdef TMAX_OUT_PRINT
         cout << output;
@@ -699,7 +699,7 @@ int main(int argc, char **argv)
     std::ofstream graph("graph.g");
     graph << to_string(nodeCount) + "\n" + to_string(edgeCount) + "\n" + graphEdges;
     graph.close();
-    #endif 
+    // #endif 
 
     #ifdef ACTIVATE_CLIQUES 
     cout << "Reading Cliques File : ";
