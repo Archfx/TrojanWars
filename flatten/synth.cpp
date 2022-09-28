@@ -381,9 +381,9 @@ int main(int argc, char **argv)
     cout << "\nBuilding the ATPG model";
     // Write the drc model for future use
     string write_image = tclSaveModel();
-    std::ofstream out("buildModel.tcl");
-    out << write_image;
-    out.close();
+    std::ofstream buildmodel("buildModel.tcl");
+    buildmodel << write_image;
+    buildmodel.close();
     execute("tmax -shell -tcl buildModel.tcl", output);
     loginfo(output);
     cout << " : Done \n";
