@@ -403,14 +403,14 @@ int main(int argc, char **argv)
         break;
 
       case 'v':
-        cout << "NDATPG : Activate rare nodes with statistical Ndetect with Synopsys TetraMax tool" << endl << "Version 1.0";
+        cout << "MCATPG : Activate cliques of rare nodes with Synopsys TetraMax tool" << endl << "Version 1.0";
         break;
     }
 
   }
 
     cout << "================================================================================" << endl <<
-     "\nNDATPG : Activate rare nodes with statistical Ndetect with Synopsys TetraMax\n";
+     "\nMCATPG : Activate cliques of rare nodes with Synopsys TetraMax tool\n";
 
 
     cout << "\nBuilding the model";
