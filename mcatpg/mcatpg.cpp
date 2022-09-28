@@ -69,7 +69,7 @@ int execute(std::string cmd, std::string& output) {
 void usage(string progName)
 {
   cout << "================================================================================" << endl <<
-      "NDATPG : Activate rare nodes with Maximal Clique Activation with Synopsys TetraMax" << endl <<
+      "MCATPG : Activate rare nodes with Maximal Clique Activation with Synopsys TetraMax" << endl <<
       "USAGE : " << progName << " [options]" << endl <<
       "Options:" << endl <<
       "-h | --help        Print this help" << endl <<
@@ -203,14 +203,14 @@ add_faults  -stuck  )"+ val2 + R"( )" + get<0>(node2) + R"(
 
 void loginfo(string output)
 {
-  std::ofstream out(top +"_ndatpg.log", std::ios::app);
+  std::ofstream out(top +"_mcatpg.log", std::ios::app);
   out << output;
   out.close();
   if (output.find("Error:") != std::string::npos && output.find("(M5)") != std::string::npos && output.find("(M377)") != std::string::npos && output.find("(M19)") != std::string::npos)  
   {
     cout << "\nERROR : Please refer the following TetraMax error. Please refer the usage details of NTATPG below\n";
     cout << " **** TetraMax error : " << output << " ***\n";
-    usage("./ndatpg");
+    usage("./mcatpg");
     exit(0);
   }
 
@@ -379,7 +379,7 @@ int main(int argc, char **argv)
         break;
 
       case 'h':
-        usage("./ndatpg");
+        usage("./mcatpg");
         break;
       
       case 'r':
