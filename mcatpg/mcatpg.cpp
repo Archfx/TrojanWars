@@ -180,8 +180,8 @@ exit
 string getConstraint(pair<string, string> node1, pair<string, string> node2)
 {
     string atpg_constraint = R"(
-add_atpg_constraints a )"+ get<1>(node1) + R"( -module )" + DESIGN +R"( )" + get<0>(node1) + R"(
-add_atpg_constraints b )"+ get<1>(node2) + R"( -module )" + DESIGN +R"( )" + get<0>(node2) + R"(
+add_atpg_constraints a )"+ get<1>(node1) + R"( -module )" + top +R"( )" + get<0>(node1) + R"(
+add_atpg_constraints b )"+ get<1>(node2) + R"( -module )" + top +R"( )" + get<0>(node2) + R"(
     )";
     return atpg_constraint;
 }
@@ -307,7 +307,7 @@ void getCliques(vector<vector <int>>& allCliques)
 {
 
     string clique;
-    ifstream cliques("Benchmarks/" + DESIGN +"/cliques.g");
+    ifstream cliques("cliques.g");
 
     while (getline (cliques, clique)) 
     {
