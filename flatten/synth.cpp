@@ -192,7 +192,7 @@ string tclSaveModel(){
     string tclContent = R"(
 set_messages -nodisplay
 set_commands noabort
-set readFile ")" + design +R"("
+set readFile  synthesised.v 
 set topModule ")" + top +R"("
 #set writeFile "design_output.v"
 set testPatterns "test_patterns.stil"
@@ -384,7 +384,6 @@ int main(int argc, char **argv)
     std::ofstream out("buildModel.tcl");
     out << write_image;
     out.close();
-    std::string output;
     execute("tmax -shell -tcl buildModel.tcl", output);
     loginfo(output);
     cout << " : Done \n";
