@@ -180,12 +180,14 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
 	}
 }
 
-void replace_txt( std::string& s, std::string const& toReplace, std::string const& replaceWith) 
+string replace_txt( std::string& s, std::string const& toReplace, std::string const& replaceWith) 
 {
+    string outs = s;
+    std::size_t pos = outs.find(toReplace);
+    if (pos == std::string::npos) return outs;
+    outs.replace(pos, toReplace.length(), replaceWith);
 
-    std::size_t pos = s.find(toReplace);
-    s.replace(pos, toReplace.length(), replaceWith);
-
+    return outs;
 }
 
 string tclSaveModel(){
@@ -291,8 +293,8 @@ int main(int argc, char **argv)
       if (node.find("[") != std::string::npos & node.find("]") != std::string::npos) 
       {
 		string rhs =  " = " + node + ";\n";
-        replace_txt(node, "[","_");
-        replace_txt(node, "]","_");
+        string nodename = replace_txt(node, "[","_");
+        node = replace_txt(nodename, "]","_");
         rarelist = rarelist + node +",";
         assign = assign + "assign " + node + rhs;
       }
@@ -326,7 +328,7 @@ int main(int argc, char **argv)
         if (lines.find(");") != std::string::npos & findinterface) 
         {
           findinterface = false;
-          replace_txt(lines, ");", ","+ rarelist +");");
+          lines = replace_txt(lines, ");", ","+ rarelist +");");
           outDesign = outDesign + lines + "\n\n\n";
           outDesign = outDesign + "output " + rarelist + "; \n";
           outDesign = outDesign + assign + "\n";   
