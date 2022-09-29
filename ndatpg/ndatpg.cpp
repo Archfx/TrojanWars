@@ -204,12 +204,14 @@ vector<string> split (string s, string delimiter) {
     return res;
 }
 
-void replace_txt( std::string& s, std::string const& toReplace, std::string const& replaceWith) 
+string replace_txt( std::string& s, std::string const& toReplace, std::string const& replaceWith) 
 {
+    string outs = s;
+    std::size_t pos = outs.find(toReplace);
+    if (pos == std::string::npos) return outs;
+    outs.replace(pos, toReplace.length(), replaceWith);
 
-    std::size_t pos = s.find(toReplace);
-    s.replace(pos, toReplace.length(), replaceWith);
-
+    return outs;
 }
 
 int min(int x, int y)
