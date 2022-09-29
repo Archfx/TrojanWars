@@ -273,6 +273,39 @@ string removeSpaces(string input)
   return input;
 }
 
+vector<string> getPis(){
+
+    string tclContent = R"(
+set_messages -nodisplay
+set_commands noabort
+read_image design.image
+set_messages -display
+report_primitives -pis
+exit
+    )";
+
+    std::ofstream out("query.tcl");
+    out << tclContent;
+    out.close();
+
+    // Read console outputs
+    std::string output;
+ 
+
+    execute("tmax -shell -tcl query.tcl", output);
+    loginfo(output);
+    std::istringstream iss(output);
+    for (std::string line; std::getline(iss, line); )
+    {
+      if (line.find("PI") != std::string::npos) 
+          {
+            pis.push_back (split(split(line,"PI  ")[1]," ")[0]);
+          }
+    }
+
+    return pis;
+}
+
 
 
 //  =============== I/O functions ===============
@@ -701,6 +734,36 @@ int main(int argc, char **argv)
     graph.close();
     // #endif 
 
+    cout << "PI extraction";
+    getPis();
+
+    int clk_index = 0;
+    int rst_index = 0;
+
+    // cout << pis.size();
+
+    for (int i = 0; i < pis.size(); i++)
+    {
+
+      if (pis[i]==clk) clk_index = i;
+      if (pis[i]==rst) rst_index = i;
+    }
+
+    for (int i = 0; i < pis.size(); i++)
+    {
+
+      if (pis[i]==clk) pis.erase(pis.begin()+i);
+    }
+
+    for (int i = 0; i < pis.size(); i++)
+    {
+
+      if (pis[i]==rst) pis.erase(pis.begin()+i);
+    }
+
+    cout << " : Done \n";
+
+    std::string output;
     execute("$cliqueFind", output);
 
      
