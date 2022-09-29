@@ -326,13 +326,11 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
 			
             vector<string> v = split (nodes, ": ");
 
-            if (v[0].find("[") != std::string::npos & rarenode.find("]") != std::string::npos) 
+            if (v[0].find("[") != std::string::npos & v[0].find("]") != std::string::npos) 
             {
 
-              string rarenode = replace_txt(rarenode, "[","_");
-              rarenode = replace_txt(rarenode, "]","_");
-
-              v[0] = rarenode;
+              string v[0] = replace_txt(v[0], "[","_");
+              v[0] = replace_txt(v[0], "]","_");
           
             }
 			
