@@ -116,7 +116,7 @@ exit
 string tclQuery(string constraint, string stuck){
 
     string tclContent = R"(
-set_messages -nodisplay
+#set_messages -nodisplay
 set_commands noabort
 read_image design.image
 #add_faults -all
