@@ -550,7 +550,7 @@ int main(int argc, char **argv)
     cout << " : Done \n";
 
     std::string output;
-    execute("$cliqueFind", output);
+    execute("$cliquefind", output);
 
      
     cout << "Reading Cliques File : ";
