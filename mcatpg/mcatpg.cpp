@@ -701,7 +701,9 @@ int main(int argc, char **argv)
     graph.close();
     // #endif 
 
-    #ifdef ACTIVATE_CLIQUES 
+    execute("$cliqueFind", output);
+
+     
     cout << "Reading Cliques File : ";
 
     vector<vector <int>> allCliques;
@@ -804,9 +806,6 @@ int main(int argc, char **argv)
     cout << " : Done \n";
     patternFile.close();
 
-    #endif
-
-    cout << " : Done \n";
 
     cout <<"\nMCATPG Generated Test Vectors saved to " + top +"_mcatpg.patterns " + "\n";
 
