@@ -240,10 +240,19 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
 			//cout << nodes;
 			
             vector<string> v = split (nodes, ": ");
+
+
+            if (v[0].find("[") != std::string::npos & v[0].find("]") != std::string::npos) 
+            {
+
+              string nodename = replace_txt(v[0], "[","_");
+              v[0] = replace_txt(nodename, "]","_");
+          
+            }
 			
 			if (v.size()>1)
 			{	
-	            rareNodeMap.push_back(make_pair(v[0], v[1]));
+	            rareNodeMap.push_back(make_pair(v[0], removeSpaces(v[1])));
 	            nodeCount ++;
 			}
         }
@@ -385,16 +394,16 @@ int main(int argc, char **argv)
      "\nNDATPG : Activate rare nodes with statistical Ndetect with Synopsys TetraMax\n";
 
 
-    cout << "\nBuilding the model";
-    // Write the drc model for future use
-    string write_image = tclSaveModel();
-    std::ofstream out("buildModel.tcl");
-    out << write_image;
-    out.close();
-    std::string output;
-    execute("tmax -shell -tcl buildModel.tcl", output);
-    loginfo(output);
-    cout << " : Done \n";
+    // cout << "\nBuilding the model";
+    // // Write the drc model for future use
+    // string write_image = tclSaveModel();
+    // std::ofstream out("buildModel.tcl");
+    // out << write_image;
+    // out.close();
+    // std::string output;
+    // execute("tmax -shell -tcl buildModel.tcl", output);
+    // loginfo(output);
+    // cout << " : Done \n";
     
 
     cout << "PI extraction";

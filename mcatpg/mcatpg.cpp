@@ -337,7 +337,7 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
 			
 			if (v.size()>1)
 			{	
-	            rareNodeMap.push_back(make_pair(v[0], v[1]));
+	            rareNodeMap.push_back(make_pair(v[0], removeSpaces(v[1])));
 	            nodeCount ++;
 			}
         }
