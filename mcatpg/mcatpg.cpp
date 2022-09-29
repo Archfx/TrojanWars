@@ -463,11 +463,7 @@ int main(int argc, char **argv)
 
 
 
-// #ifdef GRAPH_BUILD 
 
-    #ifdef TMAX_OUT_PRINT
-        cout << output;
-    #endif
 
 
     string graphEdges = "";
@@ -501,9 +497,8 @@ int main(int argc, char **argv)
 
             execute("tmax -shell -tcl query.tcl", output);
 
-            #ifdef TMAX_OUT_PRINT
-            std::cout << output;
-            #endif
+            loginfo(output);
+
 
             if (output.find("#internal patterns                           0") != std::string::npos) 
             {
@@ -562,7 +557,7 @@ int main(int argc, char **argv)
 
     std::string output;
     execute("$cliquefind", output);
-
+    loginfo(output);
      
     cout << "Reading Cliques File : ";
 
@@ -598,9 +593,7 @@ int main(int argc, char **argv)
         std::string outputCliq;
         execute("tmax -shell -tcl activateCliques.tcl", outputCliq);
 
-        #ifdef TMAX_OUT_PRINT
-        cout << outputCliq;
-        #endif
+        loginfo(outputCliq);
 
         if (output.find("Pattern 0 (full_sequential)") != std::string::npos) 
           {
