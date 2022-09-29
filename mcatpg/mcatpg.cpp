@@ -232,12 +232,14 @@ vector<string> split (string s, string delimiter) {
     return res;
 }
 
-void replace_txt( std::string& s, std::string const& toReplace, std::string const& replaceWith) 
+string replace_txt( std::string& s, std::string const& toReplace, std::string const& replaceWith) 
 {
+    string outs = s;
+    std::size_t pos = outs.find(toReplace);
+    if (pos == std::string::npos) return outs;
+    outs.replace(pos, toReplace.length(), replaceWith);
 
-    std::size_t pos = s.find(toReplace);
-    s.replace(pos, toReplace.length(), replaceWith);
-
+    return outs;
 }
 
 int min(int x, int y)
@@ -323,6 +325,16 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
 			//cout << nodes;
 			
             vector<string> v = split (nodes, ": ");
+
+            if (v[0].find("[") != std::string::npos & rarenode.find("]") != std::string::npos) 
+            {
+
+              string rarenode = replace_txt(rarenode, "[","_");
+              rarenode = replace_txt(rarenode, "]","_");
+
+              v[0] = rarenode;
+          
+            }
 			
 			if (v.size()>1)
 			{	
