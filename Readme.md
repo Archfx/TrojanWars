@@ -77,6 +77,10 @@ echo $'\n ****** Statistical Test Generation with ATPG ******* \n'
 $ndatpg -t $TOP -d synthesised.v -r $RARENODES -c $CYCLES -n $NCRITERION -k $CLK -s $RST
 
 
+echo $'\n ****** Directed Test Generation with ATPG ******* \n'
+$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST
+
+
 echo $'\n ****** Statistical Test Generation ******* \n'
 $ndetect -d $INLINE -i 1000 -c $CYCLES -t $TOP -n $NCRITERION
 
