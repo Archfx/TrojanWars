@@ -520,6 +520,7 @@ int main(int argc, char **argv)
                 
         }
     }
+    printProgress((double) 1);
     cout << "\n";
     std::ofstream graph("graph.g");
     graph << to_string(nodeCount) + "\n" + to_string(edgeCount) + "\n" + graphEdges;
@@ -654,6 +655,8 @@ int main(int argc, char **argv)
           }
         printProgress((double) i/(double)(allCliques.size()));
     }
+
+    printProgress((double) 1);
 
     cout << "\nWriting test vectors to " + top +"_mcatpg.patterns file: ";
     cout << " : Done \n";
