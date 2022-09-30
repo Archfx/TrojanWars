@@ -134,12 +134,18 @@ Rareness Analysis:
   $rare -d $INLINE -i 1000 -c $CYCLES
 ```
 
-Test Generation: (we provide two methods for test generation)
+Build ATPG model: 
+```shell
+  $synth -t $TOP -d inline.v -r $RARENODES
+```
+
+Test Generation: (we provide three methods for test generation)
 ```shell
 $ndetect -d $INLINE -i 1000 -c $CYCLES -t $TOP -n $NCRITERION
 
-$synth -t $TOP -d inline.v -r $RARENODES
-$ndatpg -t $TOP -d synthesised.v -r $RARENODES -c $CYCLES -n $NCRITERION -k $CLK -s $RST
+$ndatpg -t $TOP -r $RARENODES -c $CYCLES -n $NCRITERION -k $CLK -s $RST
+
+$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST
 ```
 
 Coverage Analysis: 
@@ -196,7 +202,10 @@ $synth -t $TOP -d inline.v -r $RARENODES
 
 
 echo $'\n ****** Statistical Test Generation with ATPG ******* \n'
-$ndatpg -t $TOP -d synthesised.v -r $RARENODES -c $CYCLES -n $NCRITERION -k $CLK -s $RST
+$ndatpg -t $TOP -r $RARENODES -c $CYCLES -n $NCRITERION -k $CLK -s $RST
+
+echo $'\n ****** Directed Test Generation with ATPG ******* \n'
+$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST
 
 
 echo $'\n ****** Statistical Test Generation ******* \n'
