@@ -590,10 +590,10 @@ int main(int argc, char **argv)
         std::ofstream actCliq("activateCliques.tcl");
         actCliq << genVectors;
         actCliq.close();
-        std::string outputCliq;
-        execute("tmax -shell -tcl activateCliques.tcl", outputCliq);
+        // std::string outputCliq;
+        execute("tmax -shell -tcl activateCliques.tcl", output);
 
-        loginfo(outputCliq);
+        loginfo(output);
 
         if (output.find("Pattern 0 (full_sequential)") != std::string::npos) 
           {
