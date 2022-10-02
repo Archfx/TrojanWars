@@ -47,6 +47,7 @@ int unroll_cycle = 3;
 vector<string> pis;
 string rst;
 string clk;
+string effort = "high";
 
 // declares
 string removeSpaces(string input);
@@ -335,11 +336,27 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
           
             }
 			
-			if (v.size()>1)
-			{	
-	            rareNodeMap.push_back(make_pair(v[0], removeSpaces(v[1])));
-	            nodeCount ++;
-			}
+      if (effort == "low")
+      {
+
+        if (v.size()==3 && !v[2].find("0.0"))
+        {	
+                rareNodeMap.push_back(make_pair(v[0], removeSpaces(v[1])));
+                nodeCount ++;
+        }
+
+      }
+      else
+      {
+
+        if (v.size()>1)
+        {	
+                rareNodeMap.push_back(make_pair(v[0], removeSpaces(v[1])));
+                nodeCount ++;
+        }
+
+      }
+			
         }
     }
 
@@ -394,6 +411,7 @@ int main(int argc, char **argv)
     {"cycles",     optional_argument,  0, 'c'},
     {"clk",     required_argument,  0, 'k'},
     {"rst",     required_argument,  0, 's'},
+    {"effort",     optional_argument,  0, 'e'},
     {0,0,0,0},
   };
 
@@ -438,6 +456,10 @@ int main(int argc, char **argv)
 
       case 's':
         rst = optarg;
+        break;
+
+      case 'e':
+        if (optarg == "low") effort = optarg;
         break;
 
       case 'v':
