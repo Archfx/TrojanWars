@@ -339,7 +339,7 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
       if (effort == "low")
       {
 
-        if (v.size()==3 && !v[2].find("0.0"))
+        if (v.size()==3 & v[2].find("0.0") == std::string::npos)
         {	
                 rareNodeMap.push_back(make_pair(v[0], removeSpaces(v[1])));
                 nodeCount ++;
