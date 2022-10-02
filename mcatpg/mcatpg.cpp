@@ -338,9 +338,10 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
 			
       if (effort == "low")
       {
-
-        if (v.size()==3 & v[2].find("0.0") == std::string::npos)
+		
+        if (v.size()==3 & !(v[2]=="0.0"))
         {	
+				// cout << v[2];
                 rareNodeMap.push_back(make_pair(v[0], removeSpaces(v[1])));
                 nodeCount ++;
         }
@@ -459,7 +460,7 @@ int main(int argc, char **argv)
         break;
 
       case 'e':
-        if (optarg == "low") effort = optarg;
+        effort = optarg;
         break;
 
       case 'v':
