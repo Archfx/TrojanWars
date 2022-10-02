@@ -426,7 +426,7 @@ int main(int argc, char **argv)
 
   while(iarg != -1)
   {
-    iarg = getopt_long(argc, argv, "t:d:r:c:k:s:vh", longopts, &index);
+    iarg = getopt_long(argc, argv, "t:d:r:c:k:s:e:vh", longopts, &index);
 
     switch (iarg)
     {
