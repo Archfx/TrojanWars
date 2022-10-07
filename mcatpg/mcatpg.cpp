@@ -465,6 +465,7 @@ int main(int argc, char **argv)
 
       case 'v':
         cout << "MCATPG : Activate cliques of rare nodes with Synopsys TetraMax tool" << endl << "Version 1.0";
+        exit(0);
         break;
     }
 
