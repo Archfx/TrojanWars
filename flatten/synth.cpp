@@ -222,6 +222,7 @@ int main(int argc, char **argv)
   
   string design = "inline.v";
   string rarenodes = "rare_nodes.txt";
+  string version = "Version 1.21";
   
 
 
@@ -266,7 +267,8 @@ int main(int argc, char **argv)
         break;
 
       case 'v':
-        cout << "Automated synthesis tool for Trojan detection : Version 1.0";
+        cout << "Automated synthesis tool for Trojan detection in MID toolchain" << endl << version << endl;
+		    exit(0);
         break;
     }
 
@@ -295,6 +297,13 @@ int main(int argc, char **argv)
 		string rhs =  " = " + node + ";\n";
         string nodename = replace_txt(node, "[","_");
         node = replace_txt(nodename, "]","_");
+        if (node.find("[") != std::string::npos & node.find("]") != std::string::npos)
+        {
+          node = replace_txt(node, "[","_");
+          node = replace_txt(node, "]","_");
+        }
+		//node = "\\" + node;
+
         rarelist = rarelist + node +",";
         assign = assign + "assign " + node + rhs;
       }
@@ -310,7 +319,7 @@ int main(int argc, char **argv)
 
 
     rarelist.pop_back();
-    // rarelist.pop_back();
+    rarelist.pop_back();
 
 
      //cout << assign;
@@ -331,9 +340,14 @@ int main(int argc, char **argv)
           lines = replace_txt(lines, ");", ","+ rarelist +");");
           outDesign = outDesign + lines + "\n\n\n";
           outDesign = outDesign + "output " + rarelist + "; \n";
-          outDesign = outDesign + assign + "\n";   
+          //outDesign = outDesign + assign + "\n";   
 		  //preSynth << outDesign << endl;        
         }
+		else if (lines.find("endmodule") != std::string::npos & findinterface)
+		{
+			outDesign = outDesign + assign + "\n"; 
+			outDesign = outDesign + "endmodule" + "\n"; 
+		} 
         else 
         {
           outDesign = outDesign + lines + "\n";
@@ -395,3 +409,4 @@ int main(int argc, char **argv)
    
 	return 0; 
 }
+
