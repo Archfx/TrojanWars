@@ -324,7 +324,7 @@ def main():
     #     data = [0]*(n+1); 
     #     rare_combination(rare_nodes, data, assertions, 0, len(rare_nodes)-1, 0, n+1)
 
-    rare_nodes = sorted(rare_nodes, key=lambda x: x.rareness)
+    rare_nodes = sorted(rare_nodes, key=lambda x: x.rareness, reverse=True)
 
     #for node in rare_nodes:
         # print(node.name, ":", node.value)
