@@ -79,11 +79,11 @@ def main():
     # tracemalloc.start()
 
 
-    print("===================================================================================" )
-    print("**********                  Rareness Analysis Tool                       **********")
+    print("================================================================================" )
+    print("********                  Rareness Analysis Tool                       *********")
 
     INFO = "Rare-Node Analyzer"
-    VERSION = 2.0
+    VERSION = "Version 1.01"
     USAGE = "Usage: python3 rare_node_analysis.py"
 
     # def showVersion():
@@ -106,8 +106,8 @@ def main():
                          dest="iteration", help="Skip random simulation", default=1000)
     optparser.add_option("-c", "--cycle", action="store",
                          dest="unroll_cycle", help="Cycles per simulation", default=10)
-    optparser.add_option("-t", "--tool", action="store",
-                         dest="tool", help="Tool used for the simulation", default="vcs -q")
+    optparser.add_option("-v", "--version", action="store_true", dest = "print_version",
+                         help="Version of the Tool", default= False)
     (options, args) = optparser.parse_args()
 
     design_file = options.design_file
@@ -116,8 +116,12 @@ def main():
     skip = int(options.skip)
     sim_iteration = int(options.iteration)
     unroll_cycle = int(options.unroll_cycle)
-    tool = options.tool
+    tool = "vcs -q"
 
+    if (options.print_version) : 
+        print (VERSION)
+        print("================================================================================" )
+        exit()
 
     # if os.path.exists(design_file):
     current_location = '' #os.path.dirname(design_file)
@@ -235,7 +239,7 @@ def main():
 
     print("Design input length", input_length)
     # Generate random test and simulate 10000 times
-    print("Simulation Started \n")
+    print("Simulation Started ")
 
     # print(nodes)
     # for x in nodes:
@@ -286,8 +290,6 @@ def main():
  
     sys.stdout.write("\n")
 
-    print("**********RARE NODE ANALYSIS**********")
-
 
     rare_nodes = []
     minimum_rareness = 1.0
@@ -317,7 +319,7 @@ def main():
                 # print(node,"[",bit, "] : ", rareness)
             bit +=1
 
-    print("*************RARE NODES saved to "+ rare_node_filepath +"***************")
+    print("RARE NODES saved to "+ rare_node_filepath )
     # for n in range(combination_values):
     #     data = [0]*(n+1); 
     #     rare_combination(rare_nodes, data, assertions, 0, len(rare_nodes)-1, 0, n+1)
@@ -334,8 +336,8 @@ def main():
     with open(rare_node_filepath, "w") as f:
         f.write("Rare Nodes in the design\n")
         for n in rare_nodes:
-            if n.bus :                
-                f.write(f"{n.name}[{n.bit}]: {n.value}  : {n.rareness}" +"\n")
+            if n.bus :
+                if ("[" not in n.name): f.write(f"{n.name}[{n.bit}]: {n.value}  : {n.rareness}" +"\n")
             else :
                 f.write(f"{n.name}: {n.value}  : {n.rareness}" +"\n")
 
@@ -343,10 +345,6 @@ def main():
     print("**********RARENESS INFO**********")
     print("Minimum non zero rareness : ", minimum_rareness)
     end = time.time()
-    #print(f"Rareness Calculation Time : {end - start}")
-    # current, peak = tracemalloc.get_traced_memory()
-    # print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
-    # tracemalloc.stop()
     print("Rareness threshold : ", threashold)
     print("Simulation Iteration : ", sim_iteration)
     print ("Design : ",design_file)
@@ -360,5 +358,4 @@ if __name__ == '__main__':
         print("Invalid arguements, please use -h flag for help")
     except FileNotFoundError:
         print("Invalid arguements, please use -h flag for help")
-    print("===================================================================================" )
-
+    print("================================================================================" )
