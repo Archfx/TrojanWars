@@ -1,10 +1,3 @@
-// #define DEBUG_MODE
-// #define TMAX_OUT_PRINT
-// #define IMAGE_BUILD
-// #define GRAPH_BUILD
-// #define ACTIVATE_CLIQUES
-
-
 #define LAZY_CONS 20 
 #define PBSTR "------------------------------------------------------------"
 #define PBWIDTH 60
@@ -47,7 +40,7 @@ int unroll_cycle = 3;
 vector<string> pis;
 string rst;
 string clk;
-string effort = "high";
+string effort = "low";
 
 // declares
 string removeSpaces(string input);
@@ -125,7 +118,7 @@ read_image design.image
 )" + stuck + R"(
 #list down the faults 
 # for scan chain designs
-set_atpg -merge high -full_seq_time {60 240} -full_seq_atpg
+set_atpg -merge low -full_seq_time {6 24} -full_seq_atpg
 run_atpg
 set_messages -display
 report_patterns -summary -internal
@@ -339,7 +332,7 @@ void getRareNodes(vector<pair<string, string>>& rareNodeMap, string rare_nodes)
       if (effort == "low")
       {
 		
-        if (v.size()==3 & !(v[2]=="0.0"))
+        if (v.size()==3 & !(v[2]=="0.0" & nodeCount < 50))
         {	
 				// cout << v[2];
                 rareNodeMap.push_back(make_pair(v[0], removeSpaces(v[1])));
@@ -412,7 +405,7 @@ int main(int argc, char **argv)
     {"cycles",     optional_argument,  0, 'c'},
     {"clk",     required_argument,  0, 'k'},
     {"rst",     required_argument,  0, 's'},
-    {"effort",     optional_argument,  0, 'e'},
+    //{"effort",     optional_argument,  0, 'e'},
     {0,0,0,0},
   };
 
@@ -423,11 +416,13 @@ int main(int argc, char **argv)
 
   opterr=1; 
 
+  string version = "Version 1.21";
+
 
 
   while(iarg != -1)
   {
-    iarg = getopt_long(argc, argv, "t:d:r:c:k:s:e:vh", longopts, &index);
+    iarg = getopt_long(argc, argv, "t:d:r:c:k:s:vh", longopts, &index);
 
     switch (iarg)
     {
@@ -459,13 +454,13 @@ int main(int argc, char **argv)
         rst = optarg;
         break;
 
-      case 'e':
-        effort = optarg;
-        break;
+      // case 'e':
+      //   effort = optarg;
+      //   break;
 
       case 'v':
-        cout << "MCATPG : Activate cliques of rare nodes with Synopsys TetraMax tool" << endl << "Version 1.0";
-        exit(0);
+        cout << "MCATPG : Activate cliques of rare nodes with Synopsys TetraMax tool" << endl << version << endl;
+		    exit(0);
         break;
     }
 
