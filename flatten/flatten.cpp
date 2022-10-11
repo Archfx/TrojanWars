@@ -237,7 +237,7 @@ int main(int argc, char **argv)
 
       case 'v':
         cout << "Automated hierarchy removing tool for Trojan detection " <<endl << version << endl;
-		exit(0);
+		    exit(0);
         break;
 
       case 'c':
@@ -287,15 +287,15 @@ int main(int argc, char **argv)
     out.close();
     std::string output;
     execute("yosys flatten.ys", output);
-	loginfo(output);
-	// execute("sed  -i 's/\\./_/g' inline.v", output);
-	execute("sed  -i 's/\\./x/g' inline.v", output);
-	loginfo(output);
-	// cout << "sed -i -E 's/\[([0-9]*)\] ;+/_\\1_ ;/g' inline.v";
-	// execute("sed -i -E 's/\\[([0-9]*)\\] +/_\\1_ /g' inline.v", output);
-	// loginfo(output);
+	  loginfo(output);
+	  // execute("sed  -i 's/\\./_/g' inline.v", output);
+	  execute("sed  -i 's/\\./x/g' inline.v", output);
+	  loginfo(output);
+	  // cout << "sed -i -E 's/\[([0-9]*)\] ;+/_\\1_ ;/g' inline.v";
+	  // execute("sed -i -E 's/\\[([0-9]*)\\] +/_\\1_ /g' inline.v", output);
+	  // loginfo(output);
     execute(requesttb(clk,rst,cycles,reset_edge), output);
-	loginfo(output);
+	  loginfo(output);
     cout << "  Done \n";
    
 	return 0;
