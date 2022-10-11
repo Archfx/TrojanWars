@@ -1,15 +1,3 @@
-// #define DEBUG_MODE
-// #define TMAX_OUT_PRINT
-// #define IMAGE_BUILD
-// #define GRAPH_BUILD
-// // #define ACTIVATE_CLIQUES
-
-
-// #define LAZY_CONS 20 
-// #define PBSTR "------------------------------------------------------------"
-// #define PBWIDTH 60
-
-
 #include <iostream> 
 #include <cstdlib>
 #include <stdio.h>
@@ -210,6 +198,8 @@ int main(int argc, char **argv)
   int effort = 0;
   string file_name ;
 
+  string version = "Version 1.01";
+
   //turn off getopt error message
   opterr=1; 
 
@@ -246,7 +236,8 @@ int main(int argc, char **argv)
         
 
       case 'v':
-        cout << "Automated synthesis tool for Trojan detection : Version 1.0";
+        cout << "Automated hierarchy removing tool for Trojan detection " <<endl << version << endl;
+		exit(0);
         break;
 
       case 'c':
@@ -297,7 +288,8 @@ int main(int argc, char **argv)
     std::string output;
     execute("yosys flatten.ys", output);
 	loginfo(output);
-	execute("sed  -i 's/\\./_/g' inline.v", output);
+	// execute("sed  -i 's/\\./_/g' inline.v", output);
+	execute("sed  -i 's/\\./x/g' inline.v", output);
 	loginfo(output);
 	// cout << "sed -i -E 's/\[([0-9]*)\] ;+/_\\1_ ;/g' inline.v";
 	// execute("sed -i -E 's/\\[([0-9]*)\\] +/_\\1_ /g' inline.v", output);
@@ -306,5 +298,4 @@ int main(int argc, char **argv)
 	loginfo(output);
     cout << "  Done \n";
    
-	return 0; 
-}
+	return 0;
