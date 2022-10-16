@@ -1,7 +1,7 @@
-# Threat heuristics - Malicious Implants Detection Version 2.0
+# Threat Heuristics - Malicious Implants Detection
 
 
-### Quick DEMO
+### DEMO
 
 1. Setup the path variables
 
@@ -9,118 +9,49 @@
 source runfirst.sh
 ```
 
-2. Run the demo benchmark
+2. Go to the Benchmark directory
 
 ```shell
 cd Benchmarks/demo
+```
+
+3. Run the demo benchmark
+
+```shell
 source run.sh
 ```
 
+### UPDATES in Alpha 2
 
-### How to Run:
+New directed test generation technique MCATPG added. Add the below line to **run.sh** script
 
-This tool is designed as a set of multiple tools that follows a flow. This reduces the process complexity drastically and user has more controlability over the experiments. Please follow the outlined flow in the run.sh file for the first time. 
-Each folder contails a tool corresponding to a seperate task in the flow (Example flow is given) of the tool. 
+```shell
 
-1. Setup the path variables
+echo $'\n ****** Directed Test Generation with ATPG ******* \n'
+$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST -g $GRAPHSIZE
+
+```
+
+
+
+### NOTES:
+
+1. The Benchmarks directory includes 10 different types of Trojan instances (each benchmark covers one type of Trojan instance).  
+
+2. To run any of these benchmarks, use the same processes above except the second step should point to the correct directory (Ex: cd Benchmarks/RS232_Trojan_Sequence_Of_Rare_Events/ ).
+
+3. The script "run.sh" performs four major tasks: (i) rareness analysis, (ii) test generation using two methods, (iii) coverage analysis using randomly sampled Trojans, and (iv) detection of hardware Trojans for a given implementaion.
+
+4. The script "run.sh" has many parameters that can be tuned for improved detection. For example, the NCRITERION is set to 10 for faster completion, however, it can be increased to improve the probability of Trojan detection.  
+
+
+### Example Flow:
+
+Setup the path variables:
 
 ```shell
 source runfirst.sh
 ```
-
-This will enable the sub tools to be invoked from their name
-
-2. Use the sub tools using the flow
-
-ex : 
-```shell
-$flatten -d aes.v -t aes -k clk -s rst -c 21
-```
-
-To make it simpler, we have included a run.sh file in each benchmark folder, (Note that you can invoke the tool from anywhere as long as the original benchmark is there and the path variables are correclty set)
-
-Example run.sh file from c2670 benchmark is given below, (run this with 'source run.sh')
-
-```shell
-
-export DESIGN=c2670.v
-export TOP=c2670  # top module name of the design
-export CLK=clk  # clk signal name
-export RST=rst  # rst signal name
-export INLINE=inline.v
-export RARENODES=rare_nodes.txt  # Rare nodes are saved to this file, You can remove or add nodes to here
-export CYCLES=3  # Pipe-line deapth or the number of simulation cycles needed
-export NCRITERION=100  # Statistical N to actvate each rare node
-export RESETEDGE=0  # 0- Rising egde 1-Falling edge
-
-export TESTVECTORS=$TOP\_mid.patterns
-
-export GOLDEN=inline.v
-export SUSPECTED=Trojan_in/trojan_inline.v
-
-
-
-
-echo $'\n ****** Flatten Tool ******* \n'
-$flatten -f $FILELIST -t $TOP -k $CLK -s $RST -c $CYCLES -x $RESETEDGE -e 10
-
-
-echo $'\n ****** Rareness Analyzer ******* \n'
-$rare -d $INLINE -i 100 -c $CYCLES -r $RARENESS
-
-
-echo $'\n ****** Instrumented Synthesizer ******* \n'
-$synth -t $TOP -d inline.v -r $RARENODES
-
-
-echo $'\n ****** Statistical Test Generation with ATPG ******* \n'
-$ndatpg -t $TOP -d synthesised.v -r $RARENODES -c $CYCLES -n $NCRITERION -k $CLK -s $RST
-
-
-echo $'\n ****** Directed Test Generation with ATPG ******* \n'
-$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST
-
-
-echo $'\n ****** Statistical Test Generation ******* \n'
-$ndetect -d $INLINE -i 1000 -c $CYCLES -t $TOP -n $NCRITERION
-
-
-echo $'\n ****** Combine generated test vectors to one file ******* \n'
-rm $TESTVECTORS 2> /dev/null
-cat *.patterns > $TESTVECTORS
-
-
-echo $'\n ****** Coverage Analysis ******* \n'
-$coverage -d $INLINE -r $RARENODES -c $CYCLES -v $TESTVECTORS -n 2 -i 10 -t $TOP
-
-
-echo $'\n ****** Implant Detection ******* \n'
-$midetect -g $GOLDEN -s $SUSPECTED -c $CYCLES -v $TESTVECTORS -o functionaldiff.txt
-
-if [ -s functionaldiff.txt ] # Check for functional difference
-then
-	 echo $'\n ****** MALICIOUS IMPLANTS DETECTED ******* \n'
-
-else
-	 echo $'\n ****** NO MALICIOUS IMPLANTS DETECTED ******* \n'
-fi
-
-
-
-echo $'\n ****** Cleaning Meta files ******* \n'
-rm -r csrc *.daidir 2> /dev/null
-rm *.ys *.key *.tcl *.run *.svf 2> /dev/null
-
-
-```
-Note : All the intermediate tools require flattened netlists. When invoking Implant detection, Golden design and the Suspected designs are the flattened versions of the respective designs.
-
-User can change the parameters in the top of the run.sh file according to the benchmark. This way parameters are passed automatically through the tools. To list down commandline arguments you can use -h or --help
-
-
-
-
-### Example Flow:
 
 Flatten Design: 
 
@@ -138,18 +69,13 @@ Rareness Analysis:
   $rare -d $INLINE -i 1000 -c $CYCLES
 ```
 
-Build ATPG model: 
-```shell
-  $synth -t $TOP -d inline.v -r $RARENODES
-```
-
-Test Generation: (we provide three methods for test generation)
+Test Generation: (we provide two methods for test generation)
 ```shell
 $ndetect -d $INLINE -i 1000 -c $CYCLES -t $TOP -n $NCRITERION
 
+$synth -t $TOP -d inline.v -r $RARENODES
 $ndatpg -t $TOP -r $RARENODES -c $CYCLES -n $NCRITERION -k $CLK -s $RST
-
-$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST
+$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST -g $GRAPHSIZE
 ```
 
 Coverage Analysis: 
@@ -182,8 +108,10 @@ export RST=rst  # rst signal name
 export INLINE=inline.v
 export RARENODES=rare_nodes.txt  # Rare nodes are saved to this file, You can remove or add nodes to here
 export CYCLES=3  # Pipe-line deapth or the number of simulation cycles needed
-export NCRITERION=100  # Statistical N to actvate each rare node
 export RESETEDGE=0  # 0- Rising egde 1-Falling edge
+
+export NCRITERION=100 # Statistical N to actvate each rare node
+export GRAPHSIZE=75 # Satisfiability graph size (number of edges) for graph created from rare signals
 
 export TESTVECTORS=$TOP\_mid.patterns
 
@@ -205,11 +133,12 @@ echo $'\n ****** Instrumented Synthesizer ******* \n'
 $synth -t $TOP -d inline.v -r $RARENODES
 
 
+echo $'\n ****** Directed Test Generation with ATPG ******* \n'
+$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST -g $GRAPHSIZE
+
+
 echo $'\n ****** Statistical Test Generation with ATPG ******* \n'
 $ndatpg -t $TOP -r $RARENODES -c $CYCLES -n $NCRITERION -k $CLK -s $RST
-
-echo $'\n ****** Directed Test Generation with ATPG ******* \n'
-$mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST
 
 
 echo $'\n ****** Statistical Test Generation ******* \n'
@@ -252,10 +181,6 @@ The current version of the tool will utilize the following libraries and package
 <li>VCS/Icarus Verilog</li>
 <li>Synopsys Tmax, DC_shell</li>
 <li>C++ 11</li>
-<li>Python3, Numpy, Psutils, gc, multiprocessing</li>
-<li>iGraph library</li>
+<li>Python3</li>
 <li>Yosys</li>
-<li>Z3 Theorem Prover</li>
-<li>Libraries used by the Z3 Theorem Prover</li>
 </ul>
-
