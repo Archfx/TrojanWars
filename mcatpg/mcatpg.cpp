@@ -661,7 +661,10 @@ int main(int argc, char **argv)
 
               if(patternFile.is_open())
               {
-                  patternFile<<pattern<< endl;  
+                for (int y=0; y<unroll_cycle; y++)
+                  {
+                      patternFile<<pattern<< endl;
+                  }  
               }
               else cerr<<"Unable to open file";
           }
