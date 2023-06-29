@@ -1,5 +1,6 @@
-# Threat Heuristics - Malicious Implants Detection
+# TrojanWars - Hardware Malicious Implants Detection Tool
 
+Hardware trojan detection is a critical process that aims to identify and mitigate the presence of malicious alterations or additions in integrated circuits or electronic devices. It involves various techniques and methodologies to ensure the integrity and trustworthiness of hardware components. Hardware trojans can be inserted during the manufacturing process, and they can pose significant risks by compromising the functionality, security, and reliability of the affected systems. Detection methods range from physical inspections, such as side-channel analysis and optical inspection, to more advanced techniques like hardware fingerprinting, anomaly detection, and formal verification. By employing a combination of these approaches, hardware trojan detection plays a vital role in safeguarding critical infrastructure, preventing unauthorized access, and maintaining the trustworthiness of electronic systems. TrojanWars utilizes efficient test generation-based techniques to activate malicious implants if present in the designs.
 
 ### DEMO
 
@@ -40,7 +41,7 @@ $mcatpg -t $TOP -r $RARENODES -c $CYCLES -k $CLK -s $RST -g $GRAPHSIZE
 
 2. To run any of these benchmarks, use the same processes above except the second step should point to the correct directory (Ex: cd Benchmarks/RS232_Trojan_Sequence_Of_Rare_Events/ ).
 
-3. The script "run.sh" performs four major tasks: (i) rareness analysis, (ii) test generation using two methods, (iii) coverage analysis using randomly sampled Trojans, and (iv) detection of hardware Trojans for a given implementaion.
+3. The script "run.sh" performs four major tasks: (i) rareness analysis, (ii) test generation using two methods, (iii) coverage analysis using randomly sampled Trojans, and (iv) detection of hardware Trojans for a given implementation.
 
 4. The script "run.sh" has many parameters that can be tuned for improved detection. For example, the NCRITERION is set to 10 for faster completion, however, it can be increased to improve the probability of Trojan detection.  
 
@@ -55,11 +56,11 @@ source runfirst.sh
 
 Flatten Design: 
 
-You can feed multple design files for the flatten tool with seperate file_list -f flags.
+You can feed multiple design files for the flatten tool with separate file_list -f flags.
 ```shell
   $flatten -f $FILELIST -t $TOP -k $CLK -s $RST -c $CYCLES
 ```
-Also you can feed multple design files for the flatten tool with seperate -d flags.
+Also, you can feed multiple design files for the flatten tool with separate -d flags.
 ```shell
   $flatten -d $DESIGN1 -d $DESIGN2 -d $DESIGN3 -t $TOP -k $CLK -s $RST -c $CYCLES
 ```
@@ -92,7 +93,7 @@ Additionally, we will provide .tcl scripts to automate the entire flow. This flo
 
 ### Example .sh script 
 
-Provided in each benchmark folder with the name of **run.sh**, You can modify top varibles accordingly. Users can invoke the tools using,
+Provided in each benchmark folder with the name of **run.sh**, You can modify top variables accordingly. Users can invoke the tools using,
 ```shell
 source run.sh
 
@@ -107,8 +108,8 @@ export CLK=clk  # clk signal name
 export RST=rst  # rst signal name
 export INLINE=inline.v
 export RARENODES=rare_nodes.txt  # Rare nodes are saved to this file, You can remove or add nodes to here
-export CYCLES=3  # Pipe-line deapth or the number of simulation cycles needed
-export RESETEDGE=0  # 0- Rising egde 1-Falling edge
+export CYCLES=3  # Pipe-line depth or the number of simulation cycles needed
+export RESETEDGE=0  # 0- Rising edge 1-Falling edge
 
 export NCRITERION=100 # Statistical N to actvate each rare node
 export GRAPHSIZE=75 # Satisfiability graph size (number of edges) for graph created from rare signals
@@ -157,7 +158,7 @@ $coverage -d $INLINE -r $RARENODES -c $CYCLES -v $TESTVECTORS -n 2 -i 10 -t $TOP
 echo $'\n ****** Implant Detection ******* \n'
 $midetect -g $GOLDEN -s $SUSPECTED -c $CYCLES -v $TESTVECTORS -o functionaldiff.txt
 
-if [ -s functionaldiff.txt ] # Check for functional difference
+if [ -s functionaldiff.txt ] # Check for the functional difference
 then
 	 echo $'\n ****** MALICIOUS IMPLANTS DETECTED ******* \n'
 
@@ -184,3 +185,19 @@ The current version of the tool will utilize the following libraries and package
 <li>Python3</li>
 <li>Yosys</li>
 </ul>
+
+### Cite this work
+
+*A. Jayasena and P. Mishra, "Scalable Detection of Hardware Trojans using ATPG-based Activation of Rare Events," in IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems, doi: 10.1109/TCAD.2023.3290537.*
+
+```latex
+@ARTICLE{Jayasena2023Scalable,
+  author={Jayasena, Aruna and Mishra, Prabhat},
+  journal={IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems}, 
+  title={Scalable Detection of Hardware Trojans using ATPG-based Activation of Rare Events}, 
+  year={2023},
+  volume={},
+  number={},
+  pages={1-1},
+  doi={10.1109/TCAD.2023.3290537}}
+```
